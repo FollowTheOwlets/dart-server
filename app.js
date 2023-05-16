@@ -12,11 +12,19 @@ const persons = [
 ];
 
 let faces = {};
+let deps = {};
 
 await fetch("https://app.spbgasu.ru/ws/faces.php")
     .then(r => r.ok ? r : {})
     .then(r => r.json())
-    .then(r => faces = r.faces);
+    .then(r => {
+        faces = r.faces;
+        deps = r.deps;
+    });
+
+console.log(deps);
+
+console.log(faces);
 
 
 app.use(cors());
@@ -35,6 +43,18 @@ app.post("/login", (req, res) => {
     res.send({person});
 });
 
+app.get("/deps", (req, res) => {
+    res.send(deps.map(
+        e => {
+            return {
+                id: e.id,
+                title: e.title,
+                child:faces.filter(el => el.cathedra === e.id)
+        }
+        }
+    ));
+})
+
 app.get("/faces", (req, res) => {
     res.send(faces.map(
         e => {
@@ -48,7 +68,7 @@ app.get("/faces", (req, res) => {
     ));
 })
 
-app.get("/faces/person", (req, res) => {
+app.get("/person", (req, res) => {
     const id = req.query.id;
     if (id === undefined) {
         res.sendStatus(403);
