@@ -46,11 +46,20 @@ app.post("/login", (req, res) => {
 app.get("/deps", (req, res) => {
     res.send(deps.map(
         e => {
+
             return {
-                id: e.id,
-                title: e.title,
-                child:faces.filter(el => el.cathedra === e.id)
-        }
+                ...e,
+                faces: faces.filter(el => el.cathedra === e.id).map(
+                    el => {
+                        return {
+                            id: el.id,
+                            fullname: el.fullname,
+                            jobTitle: el.jobTitle,
+                            img: el.img
+                        }
+                    }
+                )
+            }
         }
     ));
 })
@@ -61,7 +70,6 @@ app.get("/faces", (req, res) => {
             return {
                 id: e.id,
                 fullname: e.fullname,
-                shortname: e.shortname,
                 img: e.img
             }
         }
