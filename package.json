@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npm install cors express",
-    "run": "npm run"
+    "run": "node app.js"
   },
   "keywords": [],
   "author": "",
